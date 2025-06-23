@@ -1,0 +1,252 @@
+
+<head>
+    <div class="test2" id="test2">
+</head>
+
+<style>
+.container {
+  /*height: 200px;*/
+  position: relative;
+  /*border: 3px solid green;*/
+  margin-top: 100px;
+  margin-bottom: 250px;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.bottom-center {
+  margin: 0;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+  /*width: 33%;*/
+}
+
+/*.bottombutton {
+    position: fixed;
+    bottom: 10px;
+}*/
+
+.fade-in-image { animation: fadeIn 2s; }
+.fade-out-image { animation: fadeOut 2s; }
+
+.fade-in-text {
+  font-family: Arial;
+  font-size: 150px;
+  animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+body {
+  /*width: 1054px;*/
+  height: 7240px;
+  background-color: #000;
+}
+
+#test2 { display: none; }
+</style>
+
+<p id="demo" style="font-size: 55px; text-align: center; color:white"></p>
+
+<div class="container">
+  <div class="vertical-center">
+    <div class="test2">
+        <button style="font-size : 30px; width: 300px; height: 75px; font-family:'Lucida Console', monospace" onclick="playAudio()" type="button">Play</button>
+        <p></p>
+        <button style="font-size : 30px; width: 300px; height: 75px; font-family:'Lucida Console', monospace" onclick="pauseAudio()" type="button">Pause</button>
+    </div>
+  </div>
+</div>
+
+<div class='audio-container'>
+  <!-- <audio id="myAudio" controls loop autoplay style="margin: 0 auto; display:none;"> -->
+  <audio id="myAudio" controls loop style="margin: 0 auto; display:none;">
+    <source src="Teaser01.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+<!-- <div class="fade-in-text">
+  <p>Fade-in Text</p>
+</div> -->
+
+
+<!-- <div class="container"> -->
+  <div class="bottom-center">
+    <!-- <div class="test2" style="text-align:center"> -->
+        <button style="font-size : 30px; width: 300px; height: 75px; font-family:'Lucida Console', monospace" onclick="pauseAudio()" type="button">Pause</button>
+    <!-- </div> -->
+  </div>
+<!-- </div> -->
+
+<!-- Adding JavaScript code -->
+<script>
+    // Converting string to required date format 
+    let deadline = new Date("Jul 16, 2025 20:00:00")
+        .getTime();
+
+    // To call defined fuction every second
+    let x = setInterval(function () {
+
+        // Getting current time in required format
+        let now = new Date().getTime();
+
+        // Calculating the difference
+        let t = deadline - now;
+
+        // Getting value of days, hours, minutes, seconds
+        let days = Math.floor(t / (1000 * 60 * 60 * 24));
+        let hours = Math.floor(
+            (t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor(
+            (t % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor(
+            (t % (1000 * 60)) / 1000);
+
+        // Output the remaining time
+        document.getElementById("demo").innerHTML =
+            days + "d " + hours + "h " +
+            minutes + "m " + seconds + "s ";
+
+        // Output for over time
+        if (t < 0) {
+            clearInterval(x);
+            document.getElementById("demo")
+                .innerHTML = "EXPIRED";
+        }
+    }, 1000);
+
+    var player = document.getElementById("myAudio");
+    var musicStarted = false;
+    var myTimer = false;
+    var myDeleteTimer = false;
+    var pictureCounter = 0;
+    var picturesCreated = false;
+    var maxPhotos = 12
+
+    function playAudio() 
+    {
+        player.currentTime = 0;
+        player.play();
+        clearInterval(myTimer);
+        myTimer = setInterval(displayPicture, 500);
+
+        for (let i = 0; i < maxPhotos; i++) 
+        {
+            var imgId = "newPhoto" + i.toString();
+            element = document.getElementById(imgId);
+            if (element != null)
+            {
+                element.remove();
+            }
+        }
+        pictureCounter = 0;
+        picturesCreated = false;
+        musicStarted = false;
+    } 
+
+    function pauseAudio() { 
+        player.pause(); 
+        clearInterval(myTimer);
+    }
+
+    window.onload = function(){
+      window.setTimeout(function(){
+        document.getElementById('test2').style.display = 'block';
+      }, 1000);
+    };
+
+    function deleteDivs() {
+        for (let i = 0; i < maxPhotos; i++) { 
+            var imgId = "newPhoto" + i.toString();
+            element = document.getElementById(imgId);
+            if (element != null)
+            {
+                element.remove();
+            }
+        }
+        clearInterval(myDeleteTimer);
+    }
+
+    function displayPicture() {
+
+        if (musicStarted == false){
+          clearInterval(myTimer);
+          myTimer = setInterval(displayPicture, 2000);
+          musicStarted = true;
+        }
+
+        if (pictureCounter == maxPhotos){
+            for (let i = 0; i < maxPhotos; i++) { 
+                var imgId = "newPhoto" + i.toString();
+                document.getElementById(imgId).className = "fade-out-image";
+            }
+            pictureCounter = 0;
+            picturesCreated = true;
+
+            clearInterval(myTimer);
+            myTimer = setInterval(displayPicture, 2400);
+            myDeleteTimer = setInterval(deleteDivs, 2000);
+            musicStarted = false;
+            return;
+        }
+
+        if (pictureCounter == 0 && picturesCreated == true)
+        {
+            for (let i = 0; i < maxPhotos; i++) { 
+                var imgId = "newPhoto" + i.toString();
+                element = document.getElementById(imgId);
+                if (element != null)
+                {
+                    element.remove();
+                }
+            }
+        }
+
+        // Adding in real divs.
+        const newImgDiv = document.createElement("div");
+        var newId = "newPhoto" + pictureCounter.toString();
+        newImgDiv.id = newId;
+        newImgDiv.className = "fade-in-image";
+        const img = document.createElement("img")
+        img.src = "Photos/" + pictureCounter.toString() + ".png"
+        img.width = 672
+        img.height = 519
+        img.className = "center"
+        document.body.appendChild(newImgDiv);
+        document.getElementById(newId).appendChild(img)
+
+        pictureCounter += 1
+    }
+
+</script>
+
