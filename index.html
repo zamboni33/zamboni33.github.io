@@ -159,10 +159,15 @@ body {
             minutes + "m " + seconds + "s ";
 
         // Output for over time
-        if (t < 0) {
+        if (t < 0) 
+        {
             clearInterval(x);
             document.getElementById("demo")
-                .innerHTML = "EXPIRED";
+                .innerHTML = "TIME IS UPPPPPPPP!!!!";
+
+            setTimeout(function () {
+                window.location.replace("vamanos.html");
+            }, 2000); //will call the function after 2 secs.
         }
     }, 1000);
 
